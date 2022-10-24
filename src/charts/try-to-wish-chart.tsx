@@ -8,51 +8,73 @@ import React from "react";
  * @constructor
  */
 export function TryToWishChart(props: TryToWishChartProps) {
-    const {
-        maxBingo = Number.MAX_VALUE,
-        simulateTimes = 20000,
-        current = 0,
-    } = props;
-    let arr: number[] = [];
+    const {wish, total, simulateTimes = 20000,} = props;
+    const wishes = Array.isArray(wish) ? wish : [wish];
+    let mission: number[][] = [];
     for (let i = 0; i < simulateTimes; i++) {
-        let count = 0;
-        let baseWish = props.baseWish();
-        baseWish.current = current;
-        for (let j = 0; j < props.total; j++) {
-            if (baseWish.wish()) {
-                count++;
+        let totalWish = 0;
+        for (let j = 0; j < wishes.length; j++) {
+            const {current = 0, bingoTimes = Number.MAX_VALUE} = wishes[j];
+            let baseWish = wishes[j].baseWish();
+            baseWish.current = current;
+            let bingo = 0;
+            for (; totalWish < total; totalWish++) {
+                if (baseWish.wish()) {
+                    bingo++;
+                }
+                if (bingo === bingoTimes) {
+                    totalWish++;
+                    break;
+                }
             }
-        }
-        count = Math.min(count, maxBingo);
-        if (arr[count]) {
-            arr[count]++;
-        } else {
-            arr[count] = 1;
+            if (totalWish === total && bingo !== bingoTimes) {
+                if (!mission[j]) {
+                    mission[j] = []
+                }
+                if (!mission[j][bingo]) {
+                    mission[j][bingo] = 1;
+                } else {
+                    mission[j][bingo]++;
+                }
+                break;
+            }
         }
     }
     let xAxis = [];
     let yAxis = [];
-    for (let i = 0; i < arr.length; i++) {
-        if (arr[i]) {
-            xAxis.push(i);
-            yAxis.push(arr[i]);
+    for (let i = 0; i < mission.length; i++) {
+        if (mission[i]) {
+            for (let j = 0; j < mission[i].length; j++) {
+                if (mission[i][j]) {
+                    xAxis.push(i + ',' + j);
+                    yAxis.push(mission[i][j]);
+                }
+            }
         }
     }
     return <ReactECharts option={{
         title: {
-            text: props.total + '次祈愿结果(模拟'
+            text: total + '次结果(模拟'
         },
         tooltip: {
             trigger: 'axis',
             formatter: (params: any) => {
                 let all = 0;
-                for (let i = 0; i <= Number(params[0].name); i++) {
-                    if (arr[i]) {
-                        all += arr[i];
+                let I = Number(params[0].name.split(',')[0])
+                let J = Number(params[0].name.split(',')[1])
+                for (let i = 0; i < mission.length; i++) {
+                    if (i <= I && mission[i]) {
+                        for (let j = 0; j < mission[i].length; j++) {
+                            if (j <= J && mission[i][j]) {
+                                all += mission[i][j];
+                            }
+                        }
                     }
                 }
                 return `<div>
-                            <div>抽中up ${params[0].name}个</div>
+                            <div>${mission[0]}</div>
+                            <div>${mission[1]}</div>
+                            <div>完成前${I}个任务, 第${I + 1}个任务抽中${J}次</div>
                             <div>模拟了${params[0].value}次</div>
                             <div>当前概率: ${params[0].value / simulateTimes * 100}%</div>
                             <div>左累计概率: ${all / simulateTimes * 100}%</div>
@@ -75,9 +97,13 @@ export function TryToWishChart(props: TryToWishChartProps) {
 }
 
 export class TryToWishChartProps {
-    baseWish!: () => BaseWish;
+    wish!: TryToWish[] | TryToWish;
     total!: number;
-    maxBingo?: number;
-    current?: number;
     simulateTimes?: number;
+}
+
+export class TryToWish {
+    baseWish!: () => BaseWish;
+    bingoTimes?: number;
+    current?: number = 0;
 }
