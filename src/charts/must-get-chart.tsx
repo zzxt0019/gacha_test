@@ -8,21 +8,28 @@ import {BaseWish} from "../base/base-wish";
  * @constructor
  */
 export function MustGetChart(props: MustGetChartProps) {
-    const {current = 0, simulateTimes = 20000} = props;
+    const {wish, simulateTimes = 20000} = props;
     let arr: number[] = [];
+    let wishes: MustGetWish[] = Array.isArray(wish) ? wish : [wish];
     for (let i = 0; i < simulateTimes; i++) {
-        let baseWish = props.baseWish();
-        baseWish.current = current
-        let bingo = 0;
-        while (bingo < props.bingoTimes) {
-            if (baseWish.wish()) {
-                bingo++;
+        let total = 0;
+        for (let j = 0; j < wishes.length; j++) {
+            let wish0 = wishes[j];
+            let baseWish = wish0.baseWish();
+            const {current = 0, bingoTimes} = wish0;
+            baseWish.current = current
+            let bingo = 0;
+            while (bingo < bingoTimes) {
+                if (baseWish.wish()) {
+                    bingo++;
+                }
             }
+            total += baseWish.total;
         }
-        if (!arr[baseWish.total]) {
-            arr[baseWish.total] = 1;
+        if (!arr[total]) {
+            arr[total] = 1;
         } else {
-            arr[baseWish.total]++;
+            arr[total]++;
         }
     }
     let xAxis = [];
@@ -71,8 +78,12 @@ export function MustGetChart(props: MustGetChartProps) {
 }
 
 export class MustGetChartProps {
+    wish!: MustGetWish[] | MustGetWish
+    simulateTimes?: number;
+}
+
+export class MustGetWish {
     baseWish!: () => BaseWish;
     bingoTimes!: number;
-    current?: number;
-    simulateTimes?: number;
+    current?: number = 0;
 }

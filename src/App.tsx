@@ -1,26 +1,37 @@
-import React from 'react';
-import './App.css';
-import {Character} from "./ys/character";
-import {FgoPay} from "./fgo/fgo-pay";
-import {TryToWishChart} from "./charts/try-to-wish-chart";
+import React, {CSSProperties} from 'react';
+import {Layout} from "antd";
 import {MustGetChart} from "./charts/must-get-chart";
-import {FgoFree} from "./fgo/fgo-free";
+import {Character} from "./ys/character";
 import {Weapon} from "./ys/weapon";
+import {FgoFree} from "./fgo/fgo-free";
 
 function App() {
 
     return (
-        <div className="App">
-            <MustGetChart baseWish={() => new Weapon()} bingoTimes={1}></MustGetChart>
-            <MustGetChart baseWish={() => new Weapon()} bingoTimes={2}></MustGetChart>
-            <MustGetChart baseWish={() => new Weapon()} bingoTimes={3}></MustGetChart>
-            <MustGetChart baseWish={() => new Weapon()} bingoTimes={4}></MustGetChart>
-            <MustGetChart baseWish={() => new Weapon()} bingoTimes={5}></MustGetChart>
-            <TryToWishChart baseWish={() => new FgoPay()} total={600}></TryToWishChart>
-            <TryToWishChart baseWish={() => new Character()} total={650} maxBingo={7} current={50}></TryToWishChart>
-            <MustGetChart baseWish={() => new Character()} bingoTimes={7}></MustGetChart>
-            <MustGetChart baseWish={() => new FgoFree()} bingoTimes={2}></MustGetChart>
-        </div>
+        <Layout>
+            {/*<MustGetChart wish={[{*/}
+            {/*    baseWish: () => new Character(),*/}
+            {/*    bingoTimes: 7,*/}
+            {/*}, {*/}
+            {/*    baseWish: () => new Weapon(),*/}
+            {/*    bingoTimes: 5*/}
+            {/*}]} simulateTimes={100000}></MustGetChart>*/}
+            <MustGetChart wish={{
+                baseWish:()=>new FgoFree(),
+                bingoTimes:5
+            }} simulateTimes={100000}></MustGetChart>
+            {/*<MustGetChart wish={{*/}
+            {/*    baseWish:()=>new FgoFree(),*/}
+            {/*    bingoTimes:1,*/}
+            {/*}} simulateTimes={100000}></MustGetChart>*/}
+            {/*<MustGetChart baseWish={()=>new Weapon()} bingoTimes={1}></MustGetChart>*/}
+            {/*<Layout.Sider style={{backgroundColor: 'red'}}>*/}
+            {/*    12341234*/}
+            {/*</Layout.Sider>*/}
+            {/*<Layout.Content style={{backgroundColor: 'green'}}>*/}
+            {/*    111*/}
+            {/*</Layout.Content>*/}
+        </Layout>
     );
 }
 
