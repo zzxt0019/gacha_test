@@ -16,8 +16,11 @@ export function MustGetChart(props: MustGetChartProps) {
         for (let j = 0; j < wishes.length; j++) {
             let wish0 = wishes[j];
             let baseWish = wish0.baseWish();
-            const {current = 0, bingoTimes} = wish0;
+            const {current = 0, bingoTimes, state} = wish0;
             baseWish.current = current
+            if (state) {
+                baseWish.state = state;
+            }
             let bingo = 0;
             while (bingo < bingoTimes) {
                 if (baseWish.wish()) {
@@ -86,4 +89,5 @@ export class MustGetWish {
     baseWish!: () => BaseWish;
     bingoTimes!: number;
     current?: number = 0;
+    state?: string;
 }

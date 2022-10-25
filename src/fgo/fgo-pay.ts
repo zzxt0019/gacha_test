@@ -3,6 +3,8 @@ import {BaseWish} from "../base/base-wish";
 export class FgoPay implements BaseWish {
     current: number = 0;
     total: number = 0;
+    state = '';
+
     wish() {
         this.current++;
         this.total++;

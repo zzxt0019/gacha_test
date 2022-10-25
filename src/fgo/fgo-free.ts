@@ -4,6 +4,7 @@ export class FgoFree implements BaseWish {
     current: number = 0;
     total: number = 0;
     flag: boolean = false
+    state=''
 
     wish() {
         this.current++;
