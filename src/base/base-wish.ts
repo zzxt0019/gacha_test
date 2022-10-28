@@ -1,6 +1,7 @@
 export interface BaseWish {
-    current: number
+    current: number[]
+    state: string[]
     total: number
-    state: string
-    wish(): boolean
+
+    wish(): [number, string]
 }

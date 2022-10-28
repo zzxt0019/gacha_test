@@ -1,6 +1,7 @@
 import ReactECharts from "echarts-for-react";
 import React from "react";
 import {BaseWish} from "../base/base-wish";
+import {getEnum} from "../base/data";
 
 /**
  * 一共抽x个需要多少抽的模拟分布
@@ -11,21 +12,36 @@ export function MustGetChart(props: MustGetChartProps) {
     const {wish, simulateTimes = 20000} = props;
     let arr: number[] = [];
     let wishes: MustGetWish[] = Array.isArray(wish) ? wish : [wish];
+
+    const bingoAll = (bingo: Map<[number, string], number>, bingoTimes: Map<[number, string], number>) => {
+        let flag: boolean = true;
+        bingoTimes.forEach((value, key) => {
+            if ((bingo.get(key) as number) < value) {
+                flag = false;
+            }
+        });
+        return flag;
+    };
     for (let i = 0; i < simulateTimes; i++) {
         let total = 0;
         for (let j = 0; j < wishes.length; j++) {
             let wish0 = wishes[j];
             let baseWish = wish0.baseWish();
-            const {current = 0, bingoTimes, state} = wish0;
-            baseWish.current = current
+            const {current, bingoTimes, state} = wish0;
+            if (current) {
+                baseWish.current = current
+            }
             if (state) {
                 baseWish.state = state;
             }
-            let bingo = 0;
-            while (bingo < bingoTimes) {
-                if (baseWish.wish()) {
-                    bingo++;
-                }
+            let bingo = new Map<[number, string], number>();
+            bingoTimes.forEach((value: number, key: [number, string]) => {
+                bingo.set(getEnum(key), 0);
+            });
+
+            while (!bingoAll(bingo, bingoTimes)) {
+                let result = baseWish.wish();
+                bingo.set(getEnum(result), (bingo.get(getEnum(result)) ? bingo.get(getEnum(result)) as number : 0) + 1);
             }
             total += baseWish.total;
         }
@@ -87,7 +103,7 @@ export class MustGetChartProps {
 
 export class MustGetWish {
     baseWish!: () => BaseWish;
-    bingoTimes!: number;
-    current?: number = 0;
-    state?: string;
+    bingoTimes!: Map<[number, string], number>;
+    current?: number[];
+    state?: string[];
 }
