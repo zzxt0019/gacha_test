@@ -1,7 +1,7 @@
-import ReactECharts from "echarts-for-react";
 import React from "react";
 import {BaseWish} from "../base/base-wish";
 import {getEnum} from "../base/data";
+import ReactECharts from "echarts-for-react";
 
 /**
  * 一共抽x个需要多少抽的模拟分布

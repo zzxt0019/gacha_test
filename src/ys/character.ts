@@ -10,6 +10,9 @@
 import {BaseWish} from "../base/base-wish";
 
 export class Character implements BaseWish {
+    /**
+     *
+     */
     current: number[] = [0, 0];
     state: ['small' | 'big'
         , 'other' | 'up'] = ['small', 'other'];
