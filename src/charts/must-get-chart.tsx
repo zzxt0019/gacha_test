@@ -2,6 +2,7 @@ import React from "react";
 import {BaseWish} from "../base/base-wish";
 import {deepCopy, tuple2Enum} from "../base/data";
 import ReactECharts from "echarts-for-react";
+import {AreaContext} from "../context/area-context";
 
 /**
  * 一共抽x个需要多少抽的模拟分布
@@ -52,7 +53,8 @@ export function MustGetChart(props: MustGetChartProps) {
             yyAxis.push((yyAxis[yyAxis.length - 1] ?? 0) + arr[i]);
         }
     }
-    const {markLineData, visualPieces} = areaParams({xAxis, yAxis, xxAxis, yyAxis}, simulateTimes);
+    const areaContext = React.useContext(AreaContext);
+    const {markLineData, visualPieces} = areaParams({xAxis, yAxis, xxAxis, yyAxis}, areaContext, simulateTimes);
     return <ReactECharts
         option={{
             xAxis: {
@@ -123,20 +125,18 @@ function matchTargets(bingo: Map<[number, string], number>, targets: Map<[number
     return flag;
 }
 
-function areaParams(props: { xAxis: number[], yAxis: number[], xxAxis: number[], yyAxis: number[] }, simulateTimes: number) {
+function areaParams(props: { xAxis: number[], yAxis: number[], xxAxis: number[], yyAxis: number[] },areaContext:number[], simulateTimes: number) {
     let areaLine: number[] = [];
     const {xAxis, yAxis, xxAxis, yyAxis} = props;
     for (let i = 0; i < xAxis.length; i++) {
-        if (!areaLine[1] && yyAxis[i] >= simulateTimes / 4) {
-            areaLine[1] = xAxis[i];
-        } else if (!areaLine[2] && yyAxis[i] >= simulateTimes / 2) {
-            areaLine[2] = xAxis[i];
-        } else if (!areaLine[3] && yyAxis[i] >= simulateTimes * 3 / 4) {
-            areaLine[3] = xAxis[i];
+        for (let j = 0; j < areaContext.length; j++) {
+            if (!areaLine[1 + j]&&yyAxis[i]>=simulateTimes*areaContext[j]) {
+                areaLine[1 + j] = xAxis[i];
+            }
         }
     }
     areaLine[0] = xAxis[0];
-    areaLine[4] = xAxis[xAxis.length - 1];
+    areaLine[areaContext.length + 1] = xAxis[xAxis.length - 1];
     let markLineData = [], visualPieces = []
     for (let i = 0; i < areaLine.length - 1; i++) {
         if (i !== 0) {
