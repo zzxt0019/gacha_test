@@ -127,7 +127,7 @@ function matchTargets(bingo: Map<[number, string], number>, targets: Map<[number
 
 function areaParams(props: { xAxis: number[], yAxis: number[], xxAxis: number[], yyAxis: number[] },areaContext:number[], simulateTimes: number) {
     let areaLine: number[] = [];
-    const {xAxis, yAxis, xxAxis, yyAxis} = props;
+    const {xAxis, xxAxis, yyAxis} = props;
     for (let i = 0; i < xAxis.length; i++) {
         for (let j = 0; j < areaContext.length; j++) {
             if (!areaLine[1 + j]&&yyAxis[i]>=simulateTimes*areaContext[j]) {

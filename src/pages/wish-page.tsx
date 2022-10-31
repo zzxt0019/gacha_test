@@ -27,8 +27,7 @@ export function WishPage() {
                                 characterTargets.set(tuple2Enum([5, 'up']), value);
                                 setRefresh(!refresh);
                             }}>
-                        {[0, 1, 2, 3, 4, 5, 6, 7].map(c => <Select.Option key={c}
-                                                                          value={c}>{c - 1}命5星</Select.Option>)}
+                        {[0, 1, 2, 3, 4, 5, 6, 7].map(c => <Select.Option key={c} value={c}>{c - 1}命5星</Select.Option>)}
                     </Select>
                     <Select defaultValue={weaponTargets.get(tuple2Enum([5, 'up'])) ?? 0}
                             onChange={(value: number) => {
@@ -42,7 +41,7 @@ export function WishPage() {
                                 characterTargets.set(tuple2Enum([4, 'up1']), value);
                                 setRefresh(!refresh);
                             }}>
-                        {[0, 1, 2, 3, 4, 5, 6, 7].map(c => <Select.Option value={c}>{c - 1}命4星</Select.Option>)}
+                        {[0, 1, 2, 3, 4, 5, 6, 7].map(c => <Select.Option key={c} value={c}>{c - 1}命4星</Select.Option>)}
                     </Select>
                     <Select defaultValue={weaponTargets.get(tuple2Enum([4, 'up1'])) ?? 0}
                             onChange={(value: number) => {
