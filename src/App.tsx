@@ -1,5 +1,5 @@
 import React from 'react';
-import {WishPage} from "./ys/wish-page";
+import {WishPage} from "./pages/wish-page";
 
 
 function App() {

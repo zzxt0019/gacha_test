@@ -1,6 +1,6 @@
 import React from "react";
 import {BaseWish} from "../base/base-wish";
-import {getEnum} from "../base/data";
+import {deepCopy, tuple2Enum} from "../base/data";
 import ReactECharts from "echarts-for-react";
 
 /**
@@ -12,10 +12,9 @@ export function MustGetChart(props: MustGetChartProps) {
     const {wish, simulateTimes = 20000} = props;
     let arr: number[] = [];
     let wishes: MustGetWish[] = Array.isArray(wish) ? wish : [wish];
-
-    const bingoAll = (bingo: Map<[number, string], number>, bingoTimes: Map<[number, string], number>) => {
+    const matchTargets = (bingo: Map<[number, string], number>, targets: Map<[number, string], number>) => {
         let flag: boolean = true;
-        bingoTimes.forEach((value, key) => {
+        targets.forEach((value, key) => {
             if ((bingo.get(key) as number) < value) {
                 flag = false;
             }
@@ -27,21 +26,21 @@ export function MustGetChart(props: MustGetChartProps) {
         for (let j = 0; j < wishes.length; j++) {
             let wish0 = wishes[j];
             let baseWish = wish0.baseWish();
-            const {current, bingoTimes, state} = wish0;
+            const {current, targets, state} = wish0;
             if (current) {
-                baseWish.current = current
+                baseWish.current = deepCopy(current);
             }
             if (state) {
-                baseWish.state = state;
+                baseWish.state = deepCopy(state);
             }
             let bingo = new Map<[number, string], number>();
-            bingoTimes.forEach((value: number, key: [number, string]) => {
-                bingo.set(getEnum(key), 0);
+            targets.forEach((value: number, key: [number, string]) => {
+                bingo.set(tuple2Enum(key), 0);
             });
 
-            while (!bingoAll(bingo, bingoTimes)) {
+            while (!matchTargets(bingo, targets)) {
                 let result = baseWish.wish();
-                bingo.set(getEnum(result), (bingo.get(getEnum(result)) ? bingo.get(getEnum(result)) as number : 0) + 1);
+                bingo.set(tuple2Enum(result), (bingo.get(tuple2Enum(result)) ? bingo.get(tuple2Enum(result)) as number : 0) + 1);
             }
             total += baseWish.total;
         }
@@ -103,7 +102,7 @@ export class MustGetChartProps {
 
 export class MustGetWish {
     baseWish!: () => BaseWish;
-    bingoTimes!: Map<[number, string], number>;
+    targets!: Map<[number, string], number>;
     current?: number[];
-    state?: string[];
+    state?: number[][];
 }
