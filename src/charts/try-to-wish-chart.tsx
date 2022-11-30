@@ -1,7 +1,8 @@
-export class bb {}
+export let aa = 1
 // import {BaseWish} from "../base/base-wish";
 // import ReactECharts from "echarts-for-react";
 // import React from "react";
+// import {tuple2Enum} from "../base/data";
 //
 // /**
 //  * 一共x抽能到抽多少个的模拟分布
@@ -15,24 +16,33 @@ export class bb {}
 //     for (let i = 0; i < simulateTimes; i++) {
 //         let totalWish = 0;
 //         for (let j = 0; j < wishes.length; j++) {
-//             const {current = 0, bingoTimes = Number.MAX_VALUE} = wishes[j];
+//             const {current, targets} = wishes[j];
 //             let baseWish = wishes[j].baseWish();
-//             baseWish.current = current;
-//             let bingo = 0;
+//             if (current) {
+//                 baseWish.current = current;
+//             }
+//             let bingo = new Map<[number, string], number>();
+//             targets.forEach((value: number, key: [number, string]) => {
+//                 bingo.set(tuple2Enum(key), 0);
+//             });
 //             for (; totalWish < total; totalWish++) {
-//                 if (baseWish.wish()) {
-//                     bingo++;
+//                 let result = baseWish.wish();
+//                 if (bingo.has(tuple2Enum(result))) {
+//                     bingo.set(tuple2Enum(result), (bingo.get(tuple2Enum(result)) ? bingo.get(tuple2Enum(result)) as number : 0) + 1);
 //                 }
-//                 if (bingo === bingoTimes) {
+//                 if (matchTargets(bingo, targets)) {
 //                     totalWish++;
 //                     break;
 //                 }
 //             }
-//             if (totalWish === total && bingo !== bingoTimes) {
-//                 if (!mission[j]) {
-//                     mission[j] = []
+//             if (totalWish === total) {
+//                 if (matchTargets(bingo, targets)) {
+//                     j++;
 //                 }
-//                 if (!mission[j][bingo]) {
+//                 if (!mission[j]) {
+//                     mission[j] = [];
+//                 }
+//                 if (!mission[j][bingo.get(tuple2Enum())]) {
 //                     mission[j][bingo] = 1;
 //                 } else {
 //                     mission[j][bingo]++;
@@ -96,15 +106,25 @@ export class bb {}
 //         ],
 //     }}></ReactECharts>;
 // }
-
+//
 // export class TryToWishChartProps {
 //     wish!: TryToWish[] | TryToWish;
 //     total!: number;
 //     simulateTimes?: number;
 // }
-
+//
 // export class TryToWish {
 //     baseWish!: () => BaseWish;
-//     bingoTimes?: number;
-//     current?: number = 0;
+//     targets!: Map<[number, string], number>;
+//     current?: number[];
+// }
+//
+// function matchTargets(bingo: Map<[number, string], number>, targets: Map<[number, string], number>) {
+//     let flag: boolean = true;
+//     targets.forEach((value, key) => {
+//         if ((bingo.get(key) as number) < value) {
+//             flag = false;
+//         }
+//     });
+//     return flag;
 // }

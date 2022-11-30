@@ -31,7 +31,9 @@ export function MustGetChart(props: MustGetChartProps) {
             });
             while (!matchTargets(bingo, targets)) {
                 let result = baseWish.wish();
-                bingo.set(tuple2Enum(result), (bingo.get(tuple2Enum(result)) ? bingo.get(tuple2Enum(result)) as number : 0) + 1);
+                if (bingo.has(tuple2Enum(result))) {
+                    bingo.set(tuple2Enum(result), (bingo.get(tuple2Enum(result)) ? bingo.get(tuple2Enum(result)) as number : 0) + 1);
+                }
             }
             total += baseWish.total;
         }
@@ -125,12 +127,12 @@ function matchTargets(bingo: Map<[number, string], number>, targets: Map<[number
     return flag;
 }
 
-function areaParams(props: { xAxis: number[], yAxis: number[], xxAxis: number[], yyAxis: number[] },areaContext:number[], simulateTimes: number) {
+function areaParams(props: { xAxis: number[], yAxis: number[], xxAxis: number[], yyAxis: number[] }, areaContext: number[], simulateTimes: number) {
     let areaLine: number[] = [];
     const {xAxis, xxAxis, yyAxis} = props;
     for (let i = 0; i < xAxis.length; i++) {
         for (let j = 0; j < areaContext.length; j++) {
-            if (!areaLine[1 + j]&&yyAxis[i]>=simulateTimes*areaContext[j]) {
+            if (!areaLine[1 + j] && yyAxis[i] >= simulateTimes * areaContext[j]) {
                 areaLine[1 + j] = xAxis[i];
             }
         }
