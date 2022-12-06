@@ -65,7 +65,8 @@ export function WishPage() {
                         }
                     }}></InputNumber>
                     <Select defaultValue={characterState[0][0]} onChange={(value: number) => {
-                        setCharacterState([[value], characterState[1]])
+                        setCharacterState([[value], characterState[1]]);
+                        setCount(count => count + 1);
                     }}>
                         <Select.Option value={0}>小保底</Select.Option>
                         <Select.Option value={1}>大保底</Select.Option>
@@ -82,6 +83,7 @@ export function WishPage() {
                     }}></InputNumber>
                     <Select defaultValue={weaponState[0][0]} onChange={(value: number) => {
                         setWeaponState([[value, weaponState[0][1]], weaponState[1]]);
+                        setCount(count => count + 1);
                     }}>
                         <Select.Option value={0}>小保底</Select.Option>
                         <Select.Option value={1}>大保底</Select.Option>
@@ -89,6 +91,7 @@ export function WishPage() {
                     <Select defaultValue={weaponState[0][1]} onChange={(value: number) => {
                         weaponState[0][1] = value;
                         setWeaponState([[weaponState[0][0], value], weaponState[1]]);
+                        setCount(count => count + 1);
                     }}>
                         <Select.Option value={0}>0定轨</Select.Option>
                         <Select.Option value={1}>1定轨</Select.Option>
