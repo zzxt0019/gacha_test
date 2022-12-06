@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Dispatch, SetStateAction} from "react";
 import {BaseWish} from "../base/base-wish";
 import {deepCopy, tuple2Enum} from "../base/data";
 import ReactECharts from "echarts-for-react";
@@ -11,10 +11,10 @@ import {Spin} from "antd";
  * @constructor
  */
 export function MustGetChart(props: MustGetChartProps) {
-    const {wish, simulateTimes = 20000, count} = props;
+    const {wish, simulateTimes = 20000, loadings} = props;
+    const [loading, setLoading,count] = loadings;
     const areaContext = React.useContext(AreaContext);
     const [chartData, setChartData] = React.useState<ChartData>(new ChartData());
-    const [loading, setLoading] = React.useState(false);
     // count修改后触发计算
     React.useEffect(() => {
         setLoading(true);
@@ -134,7 +134,7 @@ export class ChartData {
 export class MustGetChartProps {
     wish!: MustGetWish[] | MustGetWish
     simulateTimes?: number;
-    count!: number;
+    loadings!: [boolean, Dispatch<SetStateAction<boolean>>, number];
 }
 
 export class MustGetWish {
