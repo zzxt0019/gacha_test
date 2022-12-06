@@ -67,6 +67,7 @@ export function MustGetChart(props: MustGetChartProps) {
             setChartData({xAxis, yAxis, xxAxis, yyAxis, markLineData, visualPieces})
             setLoading(false);
         }, 100)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [count])
     const {xAxis, yAxis, xxAxis, yyAxis, markLineData, visualPieces} = chartData
     return <Spin spinning={loading}><ReactECharts
