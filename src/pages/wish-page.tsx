@@ -17,7 +17,7 @@ export function WishPage() {
         return map;
     })());
     const [weaponTargets,] = React.useState(new Map<[number, string], number>());
-    const [refresh, setRefresh] = React.useState(false);
+    const [count, setCount] = React.useState(0)
     return (
         <div>
             <Layout>
@@ -25,28 +25,30 @@ export function WishPage() {
                     <Select defaultValue={characterTargets.get(tuple2Enum([5, 'up'])) ?? 0}
                             onChange={(value: number) => {
                                 characterTargets.set(tuple2Enum([5, 'up']), value);
-                                setRefresh(!refresh);
+                                setCount(count => count + 1);
                             }}>
-                        {[0, 1, 2, 3, 4, 5, 6, 7].map(c => <Select.Option key={c} value={c}>{c - 1}命5星</Select.Option>)}
+                        {[0, 1, 2, 3, 4, 5, 6, 7].map(c => <Select.Option key={c}
+                                                                          value={c}>{c - 1}命5星</Select.Option>)}
                     </Select>
                     <Select defaultValue={weaponTargets.get(tuple2Enum([5, 'up'])) ?? 0}
                             onChange={(value: number) => {
                                 weaponTargets.set(tuple2Enum([5, 'up']), value);
-                                setRefresh(!refresh);
+                                setCount(count => count + 1);
                             }}>
                         {[0, 1, 2, 3, 4, 5].map(c => <Select.Option key={c} value={c}>{c}精5星</Select.Option>)}
                     </Select>
                     <Select defaultValue={characterTargets.get(tuple2Enum([4, 'up1'])) ?? 0}
                             onChange={(value: number) => {
                                 characterTargets.set(tuple2Enum([4, 'up1']), value);
-                                setRefresh(!refresh);
+                                setCount(count => count + 1);
                             }}>
-                        {[0, 1, 2, 3, 4, 5, 6, 7].map(c => <Select.Option key={c} value={c}>{c - 1}命4星</Select.Option>)}
+                        {[0, 1, 2, 3, 4, 5, 6, 7].map(c => <Select.Option key={c}
+                                                                          value={c}>{c - 1}命4星</Select.Option>)}
                     </Select>
                     <Select defaultValue={weaponTargets.get(tuple2Enum([4, 'up1'])) ?? 0}
                             onChange={(value: number) => {
                                 weaponTargets.set(tuple2Enum([4, 'up1']), value);
-                                setRefresh(!refresh);
+                                setCount(count => count + 1);
                             }}>
                         {[0, 1, 2, 3, 4, 5].map(c => <Select.Option key={c} value={c}>{c}精4星</Select.Option>)}
                     </Select>
@@ -54,10 +56,10 @@ export function WishPage() {
                     <InputNumber defaultValue={0} onChange={(value: number | null) => {
                         if (value) {
                             setCharacterCurrent([value, 0]);
-                            setRefresh(!refresh);
+                            setCount(count => count + 1);
                         } else {
                             setCharacterCurrent([0, 0]);
-                            setRefresh(!refresh);
+                            setCount(count => count + 1);
                         }
                     }}></InputNumber>
                     <Select defaultValue={characterState[0][0]} onChange={(value: number) => {
@@ -70,10 +72,10 @@ export function WishPage() {
                     <InputNumber defaultValue={0} onChange={(value: number | null) => {
                         if (value) {
                             setWeaponCurrent([value, 0]);
-                            setRefresh(!refresh);
+                            setCount(count => count + 1);
                         } else {
                             setWeaponCurrent([0, 0]);
-                            setRefresh(!refresh);
+                            setCount(count => count + 1);
                         }
                     }}></InputNumber>
                     <Select defaultValue={weaponState[0][0]} onChange={(value: number) => {
@@ -93,6 +95,7 @@ export function WishPage() {
                     模拟
                     <Select defaultValue={20000} onChange={(value: number) => {
                         setSimulateTimes(value)
+                        setCount(count => count + 1);
                     }}>
                         <Select.Option value={20000}>20000</Select.Option>
                         <Select.Option value={50000}>50000</Select.Option>
@@ -113,7 +116,7 @@ export function WishPage() {
                         current: weaponCurrent,
                         state: weaponState,
                     }
-                ]} simulateTimes={simulateTimes}></MustGetChart>
+                ]} simulateTimes={simulateTimes} count={count}></MustGetChart>
             </Layout>
         </div>
     );

@@ -3,6 +3,7 @@ import {BaseWish} from "../base/base-wish";
 import {deepCopy, tuple2Enum} from "../base/data";
 import ReactECharts from "echarts-for-react";
 import {AreaContext} from "../context/area-context";
+import {Spin} from "antd";
 
 /**
  * 一共抽x个需要多少抽的模拟分布
@@ -10,54 +11,65 @@ import {AreaContext} from "../context/area-context";
  * @constructor
  */
 export function MustGetChart(props: MustGetChartProps) {
-    const {wish, simulateTimes = 20000} = props;
-    let arr: number[] = [];
-    let wishes: MustGetWish[] = Array.isArray(wish) ? wish : [wish];
-    for (let i = 0; i < simulateTimes; i++) {
-        let total = 0;
-        for (let j = 0; j < wishes.length; j++) {
-            let wish0 = wishes[j];
-            let baseWish = wish0.baseWish();
-            const {current, targets, state} = wish0;
-            if (current) {
-                baseWish.current = deepCopy(current);
-            }
-            if (state) {
-                baseWish.state = deepCopy(state);
-            }
-            let bingo = new Map<[number, string], number>();
-            targets.forEach((value: number, key: [number, string]) => {
-                bingo.set(tuple2Enum(key), 0);
-            });
-            while (!matchTargets(bingo, targets)) {
-                let result = baseWish.wish();
-                if (bingo.has(tuple2Enum(result))) {
-                    bingo.set(tuple2Enum(result), (bingo.get(tuple2Enum(result)) ? bingo.get(tuple2Enum(result)) as number : 0) + 1);
+    const {wish, simulateTimes = 20000, count} = props;
+    const areaContext = React.useContext(AreaContext);
+    const [chartData, setChartData] = React.useState<ChartData>(new ChartData());
+    const [loading, setLoading] = React.useState(false);
+    // count修改后触发计算
+    React.useEffect(() => {
+        setLoading(true);
+        setTimeout(() => {
+            let arr: number[] = [];
+            let wishes: MustGetWish[] = Array.isArray(wish) ? wish : [wish];
+            for (let i = 0; i < simulateTimes; i++) {
+                let total = 0;
+                for (let j = 0; j < wishes.length; j++) {
+                    let wish0 = wishes[j];
+                    let baseWish = wish0.baseWish();
+                    const {current, targets, state} = wish0;
+                    if (current) {
+                        baseWish.current = deepCopy(current);
+                    }
+                    if (state) {
+                        baseWish.state = deepCopy(state);
+                    }
+                    let bingo = new Map<[number, string], number>();
+                    targets.forEach((value: number, key: [number, string]) => {
+                        bingo.set(tuple2Enum(key), 0);
+                    });
+                    while (!matchTargets(bingo, targets)) {
+                        let result = baseWish.wish();
+                        if (bingo.has(tuple2Enum(result))) {
+                            bingo.set(tuple2Enum(result), (bingo.get(tuple2Enum(result)) ? bingo.get(tuple2Enum(result)) as number : 0) + 1);
+                        }
+                    }
+                    total += baseWish.total;
+                }
+                if (!arr[total]) {
+                    arr[total] = 1;
+                } else {
+                    arr[total]++;
                 }
             }
-            total += baseWish.total;
-        }
-        if (!arr[total]) {
-            arr[total] = 1;
-        } else {
-            arr[total]++;
-        }
-    }
-    let xAxis: number[] = [];
-    let xxAxis: number[] = [];  // key: xAxis的value; value: xAxis的index
-    let yAxis: number[] = [];
-    let yyAxis: number[] = [];  // yAxis的累计
-    for (let i = 0; i < arr.length; i++) {
-        if (arr[i]) {
-            xAxis.push(i);
-            xxAxis[i] = xAxis.length - 1;
-            yAxis.push(arr[i]);
-            yyAxis.push((yyAxis[yyAxis.length - 1] ?? 0) + arr[i]);
-        }
-    }
-    const areaContext = React.useContext(AreaContext);
-    const {markLineData, visualPieces} = areaParams({xAxis, yAxis, xxAxis, yyAxis}, areaContext, simulateTimes);
-    return <ReactECharts
+            let xAxis: number[] = [];
+            let xxAxis: number[] = [];  // key: xAxis的value; value: xAxis的index
+            let yAxis: number[] = [];
+            let yyAxis: number[] = [];  // yAxis的累计
+            for (let i = 0; i < arr.length; i++) {
+                if (arr[i]) {
+                    xAxis.push(i);
+                    xxAxis[i] = xAxis.length - 1;
+                    yAxis.push(arr[i]);
+                    yyAxis.push((yyAxis[yyAxis.length - 1] ?? 0) + arr[i]);
+                }
+            }
+            const {markLineData, visualPieces} = areaParams({xAxis, yAxis, xxAxis, yyAxis}, areaContext, simulateTimes);
+            setChartData({xAxis, yAxis, xxAxis, yyAxis, markLineData, visualPieces})
+            setLoading(false);
+        }, 100)
+    }, [count])
+    const {xAxis, yAxis, xxAxis, yyAxis, markLineData, visualPieces} = chartData
+    return <Spin spinning={loading}><ReactECharts
         option={{
             xAxis: {
                 type: 'category',
@@ -102,12 +114,26 @@ export function MustGetChart(props: MustGetChartProps) {
                 }
             }
         }}
-    ></ReactECharts>
+    ></ReactECharts></Spin>
+}
+
+export class ChartData {
+    xAxis!: number[];
+    yAxis!: number[];
+    xxAxis!: number[];
+    yyAxis!: number[];
+    markLineData!: { xAxis: number }[];
+    visualPieces!: {
+        ge: number,
+        lt: number,
+        color: string,
+    }[]
 }
 
 export class MustGetChartProps {
     wish!: MustGetWish[] | MustGetWish
     simulateTimes?: number;
+    count!: number;
 }
 
 export class MustGetWish {
