@@ -1,9 +1,10 @@
-import {InputNumber, Layout, Select, Space} from "antd";
+import {Button, InputNumber, Layout, Select, Space, Spin} from "antd";
 import {MustGetChart} from "../charts/must-get-chart";
 import React from "react";
 import {Weapon} from "../base/weapon";
 import {tuple2Enum} from "../base/data";
 import {Character} from "../base/character";
+import {LoadingOutlined, ReloadOutlined} from "@ant-design/icons";
 
 export function WishPage() {
     const [characterCurrent, setCharacterCurrent] = React.useState([0, 0]);
@@ -18,6 +19,7 @@ export function WishPage() {
     })());
     const [weaponTargets,] = React.useState(new Map<[number, string], number>());
     const [count, setCount] = React.useState(0)
+    const [loading, setLoading] = React.useState(false);
     return (
         <div>
             <Layout>
@@ -102,21 +104,30 @@ export function WishPage() {
                         <Select.Option value={100000}>100000</Select.Option>
                     </Select>
                     次
+                    <Button onClick={() => {
+                        if (!loading) {
+                            setCount(count => count + 1);
+                        }
+                    }}>
+                        {loading ? <LoadingOutlined spin={true}/> : <ReloadOutlined/>}
+                    </Button>
                 </Space>
-                <MustGetChart wish={[
-                    {
-                        baseWish: () => new Character(),
-                        targets: characterTargets,
-                        current: characterCurrent,
-                        state: characterState,
-                    },
-                    {
-                        baseWish: () => new Weapon(),
-                        targets: weaponTargets,
-                        current: weaponCurrent,
-                        state: weaponState,
-                    }
-                ]} simulateTimes={simulateTimes} count={count}></MustGetChart>
+                <Spin spinning={loading}>
+                    <MustGetChart wish={[
+                        {
+                            baseWish: () => new Character(),
+                            targets: characterTargets,
+                            current: characterCurrent,
+                            state: characterState,
+                        },
+                        {
+                            baseWish: () => new Weapon(),
+                            targets: weaponTargets,
+                            current: weaponCurrent,
+                            state: weaponState,
+                        }
+                    ]} simulateTimes={simulateTimes} loadings={[loading, setLoading, count]}></MustGetChart>
+                </Spin>
             </Layout>
         </div>
     );
