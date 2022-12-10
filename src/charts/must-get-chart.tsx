@@ -1,9 +1,9 @@
 import React, {Dispatch, SetStateAction} from "react";
 import {BaseWish} from "../base/base-wish";
 import {deepCopy, tuple2Enum} from "../base/data";
-import ReactECharts from "echarts-for-react";
 import {AreaContext} from "../context/area-context";
 import {Spin} from "antd";
+import {MyEcharts} from './my-echarts'
 
 /**
  * 一共抽x个需要多少抽的模拟分布
@@ -12,7 +12,7 @@ import {Spin} from "antd";
  */
 export function MustGetChart(props: MustGetChartProps) {
     const {wish, simulateTimes = 20000, loadings} = props;
-    const [loading, setLoading,count] = loadings;
+    const [loading, setLoading, count] = loadings;
     const areaContext = React.useContext(AreaContext);
     const [chartData, setChartData] = React.useState<ChartData>(new ChartData());
     // count修改后触发计算
@@ -51,10 +51,10 @@ export function MustGetChart(props: MustGetChartProps) {
                     arr[total]++;
                 }
             }
-            let xAxis: number[] = [];
-            let xxAxis: number[] = [];  // key: xAxis的value; value: xAxis的index
-            let yAxis: number[] = [];
-            let yyAxis: number[] = [];  // yAxis的累计
+            let xAxis: number[] = [];  // x轴(多少抽达成)
+            let xxAxis: number[] = [];  // key: xAxis的value; value: xAxis的index (查找抽数对应的index => x轴, y轴概率)
+            let yAxis: number[] = [];  // y轴(对应"x轴多少抽达成"的分布(模拟次数))
+            let yyAxis: number[] = [];  // yAxis的累计(分布累计 计算概率)
             for (let i = 0; i < arr.length; i++) {
                 if (arr[i]) {
                     xAxis.push(i);
@@ -70,52 +70,59 @@ export function MustGetChart(props: MustGetChartProps) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [count])
     const {xAxis, yAxis, xxAxis, yyAxis, markLineData, visualPieces} = chartData
-    return <Spin spinning={loading}><ReactECharts
-        option={{
-            xAxis: {
-                type: 'category',
-                data: xAxis
-            },
-            yAxis: {
-                type: 'value'
-            },
-            series: [
-                {
-                    data: yAxis,
-                    type: 'line',
-                    symbol: 'none',
-                    lineStyle: {
-                        color: '#336'
-                    },
-                    areaStyle: {},
-                    markLine: {
-                        symbol: ['none', 'none'],
-                        label: {show: false},
-                        data: markLineData
-                    },
-                }
-            ],
-            visualMap: {
-                type: 'piecewise',
-                show: false,
-                dimension: 0,
-                seriesIndex: 0,
-                pieces: visualPieces
-            },
-            tooltip: {
-                trigger: 'axis',
-                formatter: (params: any) => {
-                    return `<div>
+    return <>
+        <Spin spinning={loading}><MyEcharts
+            option={{
+                xAxis: {
+                    type: 'category',
+                    data: xAxis
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [
+                    {
+                        data: yAxis,
+                        type: 'line',
+                        symbol: 'none',
+                        lineStyle: {
+                            color: '#336'
+                        },
+                        areaStyle: {},
+                        markLine: {
+                            symbol: ['none', 'none'],
+                            label: {
+                                show: false,
+                                formatter: (obj: any) => {
+                                    return xAxis[obj.data.value]
+                                }
+                            },
+                            data: markLineData
+                        },
+                    }
+                ],
+                visualMap: {
+                    type: 'piecewise',
+                    show: false,
+                    dimension: 0,
+                    seriesIndex: 0,
+                    pieces: visualPieces
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: (params: any) => {
+                        return `<div>
                                 <div>抽了${params[0].name}次</div>
                                 <div>模拟了${params[0].value}次</div>
                                 <div>当前概率: ${params[0].value / simulateTimes * 100}%</div>
                                 <div>左累计概率: ${yyAxis[xxAxis[Number(params[0].name)]] / simulateTimes * 100}%</div>
                                 <div>右累计概率: ${(simulateTimes - yyAxis[xxAxis[Number(params[0].name)]] + params[0].value) / simulateTimes * 100}%</div>
                             </div>`
+                    }
                 }
-            }
-        }}
-    ></ReactECharts></Spin>
+            }}
+        ></MyEcharts></Spin>
+    </>
 }
 
 export class ChartData {
@@ -154,18 +161,18 @@ function matchTargets(bingo: Map<[number, string], number>, targets: Map<[number
     return flag;
 }
 
-function areaParams(props: { xAxis: number[], yAxis: number[], xxAxis: number[], yyAxis: number[] }, areaContext: number[], simulateTimes: number) {
+function areaParams(props: { xAxis: number[], yAxis: number[], xxAxis: number[], yyAxis: number[] }, areaColors: number[], simulateTimes: number) {
     let areaLine: number[] = [];
     const {xAxis, xxAxis, yyAxis} = props;
     for (let i = 0; i < xAxis.length; i++) {
-        for (let j = 0; j < areaContext.length; j++) {
-            if (!areaLine[1 + j] && yyAxis[i] >= simulateTimes * areaContext[j]) {
+        for (let j = 0; j < areaColors.length; j++) {
+            if (!areaLine[1 + j] && yyAxis[i] >= simulateTimes * areaColors[j]) {
                 areaLine[1 + j] = xAxis[i];
             }
         }
     }
     areaLine[0] = xAxis[0];
-    areaLine[areaContext.length + 1] = xAxis[xAxis.length - 1];
+    areaLine[areaColors.length + 1] = xAxis[xAxis.length - 1];
     let markLineData = [], visualPieces = []
     for (let i = 0; i < areaLine.length - 1; i++) {
         if (i !== 0) {
