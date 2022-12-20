@@ -1,6 +1,6 @@
 import React from 'react';
-import {WishPage} from "./pages/wish-page";
-import {AreaContext} from "./context/area-context";
+import {WishPage} from "./wish/pages/wish-page";
+import {AreaContext} from "./base/area-context";
 
 function App() {
     return (

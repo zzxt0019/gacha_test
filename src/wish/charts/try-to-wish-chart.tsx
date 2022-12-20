@@ -1,4 +1,4 @@
-export let aa = 1
+export default undefined
 // import {BaseWish} from "../base/base-wish";
 // import ReactECharts from "echarts-for-react";
 // import React from "react";

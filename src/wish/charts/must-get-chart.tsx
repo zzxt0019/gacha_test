@@ -1,9 +1,9 @@
 import React, {Dispatch, SetStateAction} from "react";
-import {BaseWish} from "../base/base-wish";
-import {deepCopy, tuple2Enum} from "../base/data";
-import {AreaContext} from "../context/area-context";
+import {BaseWish} from "../service/base-wish";
+import {deepCopy, tuple2Enum} from "../../base/data";
+import {AreaContext} from "../../base/area-context";
 import {Spin} from "antd";
-import {MyEcharts} from './my-echarts'
+import {MyEcharts} from '../../base/my-echarts'
 
 /**
  * 一共抽x个需要多少抽的模拟分布

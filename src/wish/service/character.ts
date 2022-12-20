@@ -2,6 +2,9 @@ import {BaseWish} from "./base-wish";
 
 export class Character implements BaseWish {
     current: number[] = [0, 0];
+    /*
+      [五星保底, 四星保底]
+     */
     state: [[0] | [1], [0] | [1]] = [[0], [1]];
     total: number = 0;
 

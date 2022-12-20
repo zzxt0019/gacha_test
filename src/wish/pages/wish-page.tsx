@@ -1,9 +1,9 @@
 import {Button, InputNumber, Layout, Select, Slider, Space, Spin} from "antd";
 import {MustGetChart} from "../charts/must-get-chart";
 import React from "react";
-import {Weapon} from "../base/weapon";
-import {tuple2Enum} from "../base/data";
-import {Character} from "../base/character";
+import {Weapon} from "../service/weapon";
+import {tuple2Enum} from "../../base/data";
+import {Character} from "../service/character";
 import {LoadingOutlined, ReloadOutlined} from "@ant-design/icons";
 
 export function WishPage() {

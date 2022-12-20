@@ -1,12 +1,14 @@
-// 70   i<=62
-// 70 + 700*(i-62) i>=63
-// 600  i<=7
-// 600 + 6000*(i-7)  i>=8
 import {BaseWish} from "./base-wish";
 
 export class Weapon implements BaseWish {
     current: number[] = [0, 0];
     total: number = 0;
+    /*
+       [[a, b], c]
+       a: 0 小保底   1 大保底
+       b: 0 0定轨   1 1定轨   2 满定轨
+       c: 四星保底   0 小保底   1 大保底
+     */
     state: [[0, 0] | [1, 0] | [0, 1] | [1, 1] | [0, 2] | [1, 2],
             [0] | [1]] = [[0, 0], [0]];
 
