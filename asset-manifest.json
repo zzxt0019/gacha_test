@@ -1,13 +1,10 @@
 {
   "files": {
-    "main.css": "/gacha_test/static/css/main.dd1ea7b7.css",
-    "main.js": "/gacha_test/static/js/main.34ae55eb.js",
+    "main.js": "/gacha_test/static/js/main.d7fb8aed.js",
     "index.html": "/gacha_test/index.html",
-    "main.dd1ea7b7.css.map": "/gacha_test/static/css/main.dd1ea7b7.css.map",
-    "main.34ae55eb.js.map": "/gacha_test/static/js/main.34ae55eb.js.map"
+    "main.d7fb8aed.js.map": "/gacha_test/static/js/main.d7fb8aed.js.map"
   },
   "entrypoints": [
-    "static/css/main.dd1ea7b7.css",
-    "static/js/main.34ae55eb.js"
+    "static/js/main.d7fb8aed.js"
   ]
 }
