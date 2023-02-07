@@ -71,57 +71,68 @@ export function MustGetChart(props: MustGetChartProps) {
     }, [refreshChart])
     const {xAxis, yAxis, xxAxis, yyAxis, markLineData, visualPieces} = chartData
     return <>
-        <Spin spinning={loading}><MyEcharts
-            option={{
-                xAxis: {
-                    type: 'category',
-                    data: xAxis
-                },
-                yAxis: {
-                    type: 'value'
-                },
-                series: [
-                    {
-                        data: yAxis,
-                        type: 'line',
-                        symbol: 'none',
-                        lineStyle: {
-                            color: '#336'
-                        },
-                        areaStyle: {},
-                        markLine: {
-                            symbol: ['none', 'none'],
-                            label: {
-                                show: false,
-                                formatter: (obj: any) => {
-                                    return xAxis[obj.data.value]
-                                }
+        <Spin spinning={loading}>
+            <MyEcharts
+                option={{
+                    xAxis: {
+                        type: 'category',
+                        data: xAxis
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [
+                        {
+                            data: yAxis,
+                            type: 'line',
+                            symbol: 'none',
+                            lineStyle: {
+                                color: '#336'
                             },
-                            data: markLineData
-                        },
-                    }
-                ],
-                visualMap: {
-                    type: 'piecewise',
-                    show: false,
-                    dimension: 0,
-                    seriesIndex: 0,
-                    pieces: visualPieces
-                },
-                tooltip: {
-                    trigger: 'axis',
-                    formatter: (params: any) => {
-                        return `<div>
+                            areaStyle: {},
+                            markLine: {
+                                symbol: ['none', 'none'],
+                                label: {
+                                    show: false,
+                                    formatter: (obj: any) => {
+                                        return xAxis[obj.data.value]
+                                    }
+                                },
+                                data: markLineData
+                            },
+                        }
+                    ],
+                    visualMap: {
+                        type: 'piecewise',
+                        show: false,
+                        dimension: 0,
+                        seriesIndex: 0,
+                        pieces: visualPieces
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        formatter: (params: any) => {
+                            return `<div>
                                 <div>抽了${params[0].name}次</div>
                                 <div>模拟了${params[0].value}次</div>
                                 <div>当前概率: ${params[0].value / simulateTimes * 100}%</div>
                                 <div>左累计概率: ${yyAxis[xxAxis[Number(params[0].name)]] / simulateTimes * 100}%</div>
                                 <div>右累计概率: ${(simulateTimes - yyAxis[xxAxis[Number(params[0].name)]] + params[0].value) / simulateTimes * 100}%</div>
                             </div>`
+                        }
                     }
+                }}
+            ></MyEcharts>
+            平均: {(() => {
+            if (xAxis && yAxis) {
+                let total = 0;
+                for (let i = 0; i < xAxis.length; i++) {
+                    total += xAxis[i] * yAxis[i];
                 }
-            }}
-        ></MyEcharts></Spin>
+                return total / simulateTimes;
+            }
+        })()}
+        </Spin>
     </>
 }
 
