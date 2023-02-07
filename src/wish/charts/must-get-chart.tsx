@@ -12,7 +12,7 @@ import {MyEcharts} from '../../base/my-echarts'
  */
 export function MustGetChart(props: MustGetChartProps) {
     const {wish, simulateTimes = 20000, loadings} = props;
-    const [loading, setLoading, count] = loadings;
+    const [loading, setLoading, refreshChart] = loadings;
     const areaContext = React.useContext(AreaContext);
     const [chartData, setChartData] = React.useState<ChartData>(new ChartData());
     // count修改后触发计算
@@ -68,7 +68,7 @@ export function MustGetChart(props: MustGetChartProps) {
             setLoading(false);
         }, 100)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [count])
+    }, [refreshChart])
     const {xAxis, yAxis, xxAxis, yyAxis, markLineData, visualPieces} = chartData
     return <>
         <Spin spinning={loading}><MyEcharts
@@ -141,7 +141,7 @@ export class ChartData {
 export class MustGetChartProps {
     wish!: MustGetWish[] | MustGetWish
     simulateTimes?: number;
-    loadings!: [boolean, Dispatch<SetStateAction<boolean>>, number];
+    loadings!: [boolean, Dispatch<SetStateAction<boolean>>, boolean];
 }
 
 export class MustGetWish {

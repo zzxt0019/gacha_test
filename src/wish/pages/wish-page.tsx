@@ -24,7 +24,8 @@ export function WishPage() {
         return map;
     })());
     const [weaponTargets,] = React.useState(new Map<[number, string], number>());
-    const [count, setCount] = React.useState(0)
+    const [, setRefreshPage] = React.useState(false);
+    const [refreshChart, setRefreshChart] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [pause, setPause] = React.useState(false);
     const [pauseChange, setPauseChange] = React.useState(false);
@@ -34,7 +35,7 @@ export function WishPage() {
                 <Space wrap={true}>
                     <Button onClick={() => {
                         if (pause && pauseChange) {
-                            setCount(count => count + 1);
+                            setRefreshChart(fresh => !fresh);
                             setPauseChange(false);
                         }
                         setPause(pause => !pause);
@@ -45,8 +46,8 @@ export function WishPage() {
                             style={{width: '90px'}}
                             onChange={(value: number) => {
                                 characterTargets.set(tuple2Enum([5, 'up']), value);
-                                !pause && setCount(count => count + 1);
-                                pause && setPauseChange(true);
+                                !pause && setRefreshChart(refresh => !refresh);
+                                setRefreshPage(refresh => !refresh);
                             }}>
                         {[0, 1, 2, 3, 4, 5, 6, 7].map(c => <Select.Option key={c} value={c}>
                             {c === 0 ? '无' : `${c - 1}命5星`}</Select.Option>)}
@@ -55,8 +56,8 @@ export function WishPage() {
                             style={{width: '90px'}}
                             onChange={(value: number) => {
                                 weaponTargets.set(tuple2Enum([5, 'up']), value);
-                                !pause && setCount(count => count + 1);
-                                pause && setPauseChange(true);
+                                !pause && setRefreshChart(fresh => !fresh);
+                                setRefreshPage(refresh => !refresh);
                             }}>
                         {[0, 1, 2, 3, 4, 5].map(c => <Select.Option key={c} value={c}>
                             {c === 0 ? '无' : `${c}精5星`}</Select.Option>)}
@@ -65,8 +66,8 @@ export function WishPage() {
                             style={{width: '90px'}}
                             onChange={(value: number) => {
                                 characterTargets.set(tuple2Enum([4, 'up1']), value);
-                                !pause && setCount(count => count + 1);
-                                pause && setPauseChange(true);
+                                !pause && setRefreshChart(fresh => !fresh);
+                                setRefreshPage(refresh => !refresh);
                             }}>
                         {[0, 1, 2, 3, 4, 5, 6, 7].map(c => <Select.Option key={c} value={c}>
                             {c === 0 ? '无' : `${c - 1}命4星`}</Select.Option>)}
@@ -75,8 +76,8 @@ export function WishPage() {
                             style={{width: '90px'}}
                             onChange={(value: number) => {
                                 weaponTargets.set(tuple2Enum([4, 'up1']), value);
-                                !pause && setCount(count => count + 1);
-                                pause && setPauseChange(true);
+                                !pause && setRefreshChart(fresh => !fresh);
+                                setRefreshPage(refresh => !refresh);
                             }}>
                         {[0, 1, 2, 3, 4, 5].map(c => <Select.Option key={c} value={c}>
                             {c === 0 ? '无' : `${c}精4星`}</Select.Option>)}
@@ -86,14 +87,14 @@ export function WishPage() {
                                  min={0} max={89} precision={0}
                                  onChange={(value: number | null) => {
                                      setCharacterCurrent([value ? value : 0, 0]);
-                                     !pause && setCount(count => count + 1);
+                                     !pause && setRefreshChart(fresh => !fresh);
                                      pause && setPauseChange(true);
                                  }}></InputNumber>
                     <Select value={characterState[0][0]} disabled={loading}
                             onChange={(value: number) => {
                                 setCharacterState([[value], characterState[1]]);
-                                !pause && setCount(count => count + 1);
-                                pause && setPauseChange(true);
+                                !pause && setRefreshChart(fresh => !fresh);
+                                setRefreshPage(refresh => !refresh);
                             }}>
                         <Select.Option value={0}>角色池小保底</Select.Option>
                         <Select.Option value={1}>角色池大保底</Select.Option>
@@ -103,14 +104,14 @@ export function WishPage() {
                                  min={0} max={79} precision={0}
                                  onChange={(value: number | null) => {
                                      setWeaponCurrent([value ? value : 0, 0]);
-                                     !pause && setCount(count => count + 1);
-                                     pause && setPauseChange(true);
+                                     !pause && setRefreshChart(fresh => !fresh);
+                                     setRefreshPage(refresh => !refresh);
                                  }}></InputNumber>
                     <Select value={weaponState[0][0]} disabled={loading}
                             onChange={(value: number) => {
                                 setWeaponState([[value, weaponState[0][1]], weaponState[1]]);
-                                !pause && setCount(count => count + 1);
-                                pause && setPauseChange(true);
+                                !pause && setRefreshChart(fresh => !fresh);
+                                setRefreshPage(refresh => !refresh);
                             }}>
                         <Select.Option value={0}>武器池小保底</Select.Option>
                         <Select.Option value={1}>武器池大保底</Select.Option>
@@ -119,8 +120,8 @@ export function WishPage() {
                             onChange={(value: number) => {
                                 weaponState[0][1] = value;
                                 setWeaponState([[weaponState[0][0], value], weaponState[1]]);
-                                !pause && setCount(count => count + 1);
-                                pause && setPauseChange(true);
+                                !pause && setRefreshChart(fresh => !fresh);
+                                setRefreshPage(refresh => !refresh);
                             }}>
                         <Select.Option value={0}>0定轨</Select.Option>
                         <Select.Option value={1}>1定轨</Select.Option>
@@ -129,8 +130,8 @@ export function WishPage() {
                     <Select value={simulateTimes} disabled={loading}
                             onChange={(value: number) => {
                                 setSimulateTimes(value)
-                                !pause && setCount(count => count + 1);
-                                pause && setPauseChange(true);
+                                !pause && setRefreshChart(fresh => !fresh);
+                                setRefreshPage(refresh => !refresh);
                             }}>
                         {[20000, 50000, 100000].map(value => <Select.Option
                             value={value}>模拟{value}次</Select.Option>)}
@@ -145,13 +146,13 @@ export function WishPage() {
                             characterTargets.clear();
                             characterTargets.set(tuple2Enum([5, 'up']), 1);
                             weaponTargets.clear();
-                            setCount(count => count + 1);
+                            setRefreshChart(fresh => !fresh);
                             setPauseChange(false);
                         }}><CloseOutlined/></Button>
                     </Tooltip>
                     <Tooltip title={'刷新'}>
                         <Button disabled={loading} onClick={() => {
-                            setCount(count => count + 1);
+                            setRefreshChart(fresh => !fresh);
                         }}>
                             {loading ? <LoadingOutlined spin={true}/> : <ReloadOutlined/>}
                         </Button>
@@ -171,7 +172,7 @@ export function WishPage() {
                             current: weaponCurrent,
                             state: weaponState,
                         }
-                    ]} simulateTimes={simulateTimes} loadings={[loading, setLoading, count]}></MustGetChart>
+                    ]} simulateTimes={simulateTimes} loadings={[loading, setLoading, refreshChart]}></MustGetChart>
                 </Spin>
             </Layout>
         </div>
