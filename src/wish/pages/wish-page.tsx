@@ -35,6 +35,7 @@ export function WishPage() {
                 <Space wrap={true}>
                     <Button onClick={() => {
                         if (pause && pauseChange) {
+                            console.log('refreshChart',refreshChart)
                             setRefreshChart(fresh => !fresh);
                             setPauseChange(false);
                         }
@@ -47,6 +48,7 @@ export function WishPage() {
                             onChange={(value: number) => {
                                 characterTargets.set(tuple2Enum([5, 'up']), value);
                                 !pause && setRefreshChart(refresh => !refresh);
+                                pause && setPauseChange(true);
                                 setRefreshPage(refresh => !refresh);
                             }}>
                         {[0, 1, 2, 3, 4, 5, 6, 7].map(c => <Select.Option key={c} value={c}>
@@ -57,6 +59,7 @@ export function WishPage() {
                             onChange={(value: number) => {
                                 weaponTargets.set(tuple2Enum([5, 'up']), value);
                                 !pause && setRefreshChart(fresh => !fresh);
+                                pause && setPauseChange(true);
                                 setRefreshPage(refresh => !refresh);
                             }}>
                         {[0, 1, 2, 3, 4, 5].map(c => <Select.Option key={c} value={c}>
@@ -67,6 +70,7 @@ export function WishPage() {
                             onChange={(value: number) => {
                                 characterTargets.set(tuple2Enum([4, 'up1']), value);
                                 !pause && setRefreshChart(fresh => !fresh);
+                                pause && setPauseChange(true);
                                 setRefreshPage(refresh => !refresh);
                             }}>
                         {[0, 1, 2, 3, 4, 5, 6, 7].map(c => <Select.Option key={c} value={c}>
@@ -77,6 +81,7 @@ export function WishPage() {
                             onChange={(value: number) => {
                                 weaponTargets.set(tuple2Enum([4, 'up1']), value);
                                 !pause && setRefreshChart(fresh => !fresh);
+                                pause && setPauseChange(true);
                                 setRefreshPage(refresh => !refresh);
                             }}>
                         {[0, 1, 2, 3, 4, 5].map(c => <Select.Option key={c} value={c}>
@@ -89,11 +94,13 @@ export function WishPage() {
                                      setCharacterCurrent([value ? value : 0, 0]);
                                      !pause && setRefreshChart(fresh => !fresh);
                                      pause && setPauseChange(true);
+                                     setRefreshPage(refresh => !refresh);
                                  }}></InputNumber>
                     <Select value={characterState[0][0]} disabled={loading}
                             onChange={(value: number) => {
                                 setCharacterState([[value], characterState[1]]);
                                 !pause && setRefreshChart(fresh => !fresh);
+                                pause && setPauseChange(true);
                                 setRefreshPage(refresh => !refresh);
                             }}>
                         <Select.Option value={0}>角色池小保底</Select.Option>
@@ -105,12 +112,14 @@ export function WishPage() {
                                  onChange={(value: number | null) => {
                                      setWeaponCurrent([value ? value : 0, 0]);
                                      !pause && setRefreshChart(fresh => !fresh);
+                                     pause && setPauseChange(true);
                                      setRefreshPage(refresh => !refresh);
                                  }}></InputNumber>
                     <Select value={weaponState[0][0]} disabled={loading}
                             onChange={(value: number) => {
                                 setWeaponState([[value, weaponState[0][1]], weaponState[1]]);
                                 !pause && setRefreshChart(fresh => !fresh);
+                                pause && setPauseChange(true);
                                 setRefreshPage(refresh => !refresh);
                             }}>
                         <Select.Option value={0}>武器池小保底</Select.Option>
@@ -121,6 +130,7 @@ export function WishPage() {
                                 weaponState[0][1] = value;
                                 setWeaponState([[weaponState[0][0], value], weaponState[1]]);
                                 !pause && setRefreshChart(fresh => !fresh);
+                                pause && setPauseChange(true);
                                 setRefreshPage(refresh => !refresh);
                             }}>
                         <Select.Option value={0}>0定轨</Select.Option>
@@ -131,6 +141,7 @@ export function WishPage() {
                             onChange={(value: number) => {
                                 setSimulateTimes(value)
                                 !pause && setRefreshChart(fresh => !fresh);
+                                pause && setPauseChange(true);
                                 setRefreshPage(refresh => !refresh);
                             }}>
                         {[20000, 50000, 100000].map(value => <Select.Option
