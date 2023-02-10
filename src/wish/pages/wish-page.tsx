@@ -33,16 +33,6 @@ export function WishPage() {
         <div>
             <Layout>
                 <Space wrap={true}>
-                    <Button onClick={() => {
-                        if (pause && pauseChange) {
-                            console.log('refreshChart',refreshChart)
-                            setRefreshChart(fresh => !fresh);
-                            setPauseChange(false);
-                        }
-                        setPause(pause => !pause);
-                    }}>
-                        {pause ? <PlayCircleOutlined/> : <PauseCircleOutlined/>}
-                    </Button>
                     <Select value={characterTargets.get(tuple2Enum([5, 'up'])) ?? 0} disabled={loading}
                             style={{width: '90px'}}
                             onChange={(value: number) => {
@@ -87,6 +77,8 @@ export function WishPage() {
                         {[0, 1, 2, 3, 4, 5].map(c => <Select.Option key={c} value={c}>
                             {c === 0 ? '无' : `${c}精4星`}</Select.Option>)}
                     </Select>
+                </Space>
+                <Space wrap={true}>
                     <InputNumber value={characterCurrent[0]} disabled={loading}
                                  addonBefore={'角色池已垫'} style={{width: '165px'}}
                                  min={0} max={89} precision={0}
@@ -137,16 +129,8 @@ export function WishPage() {
                         <Select.Option value={1}>1定轨</Select.Option>
                         <Select.Option value={2}>满定轨</Select.Option>
                     </Select>
-                    <Select value={simulateTimes} disabled={loading}
-                            onChange={(value: number) => {
-                                setSimulateTimes(value)
-                                !pause && setRefreshChart(fresh => !fresh);
-                                pause && setPauseChange(true);
-                                setRefreshPage(refresh => !refresh);
-                            }}>
-                        {[20000, 50000, 100000].map(value => <Select.Option
-                            value={value}>模拟{value}次</Select.Option>)}
-                    </Select>
+                </Space>
+                <Space wrap={true}>
                     <Tooltip title={'还原初始值'}>
                         <Button disabled={loading} onClick={() => {
                             setCharacterCurrent([0, 0]);
@@ -168,6 +152,27 @@ export function WishPage() {
                             {loading ? <LoadingOutlined spin={true}/> : <ReloadOutlined/>}
                         </Button>
                     </Tooltip>
+                    <Tooltip title={pause ? '运行' : '暂停'}>
+                        <Button onClick={() => {
+                            if (pause && pauseChange) {
+                                setRefreshChart(fresh => !fresh);
+                                setPauseChange(false);
+                            }
+                            setPause(pause => !pause);
+                        }}>
+                            {pause ? <PlayCircleOutlined/> : <PauseCircleOutlined/>}
+                        </Button>
+                    </Tooltip>
+                    <Select value={simulateTimes} disabled={loading}
+                            onChange={(value: number) => {
+                                setSimulateTimes(value)
+                                !pause && setRefreshChart(fresh => !fresh);
+                                pause && setPauseChange(true);
+                                setRefreshPage(refresh => !refresh);
+                            }}>
+                        {[20000, 50000, 100000].map(value => <Select.Option
+                            value={value}>模拟{value}次</Select.Option>)}
+                    </Select>
                 </Space>
                 <Spin spinning={loading}>
                     <MustGetChart wish={[

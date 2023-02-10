@@ -2,8 +2,9 @@ import React, {Dispatch, SetStateAction} from "react";
 import {BaseWish} from "../service/base-wish";
 import {deepCopy, tuple2Enum} from "../../base/data";
 import {AreaContext} from "../../base/area-context";
-import {Spin} from "antd";
+import {Result, Spin} from "antd";
 import {MyEcharts} from '../../base/my-echarts'
+import * as math from "mathjs";
 
 /**
  * 一共抽x个需要多少抽的模拟分布
@@ -113,25 +114,26 @@ export function MustGetChart(props: MustGetChartProps) {
                         trigger: 'axis',
                         formatter: (params: any) => {
                             return `<div>
-                                <div>抽了${params[0].name}次</div>
-                                <div>模拟了${params[0].value}次</div>
-                                <div>当前概率: ${params[0].value / simulateTimes * 100}%</div>
-                                <div>左累计概率: ${yyAxis[xxAxis[Number(params[0].name)]] / simulateTimes * 100}%</div>
-                                <div>右累计概率: ${(simulateTimes - yyAxis[xxAxis[Number(params[0].name)]] + params[0].value) / simulateTimes * 100}%</div>
+                                <div>使用: ${params[0].name}抽</div>
+                                <div>当前概率: ${math.bignumber(params[0].value).div(simulateTimes).mul(100).toNumber()}%</div>
+                                <div>左累计概率: ${math.bignumber(yyAxis[xxAxis[Number(params[0].name)]]).div(simulateTimes).mul(100).toNumber()}%</div>
+                                <div>右累计概率: ${math.bignumber(simulateTimes - yyAxis[xxAxis[Number(params[0].name)]] + params[0].value).div(simulateTimes).mul(100).toNumber()}%</div>
                             </div>`
                         }
                     }
                 }}
             ></MyEcharts>
-            平均: {(() => {
-            if (xAxis && yAxis) {
-                let total = 0;
-                for (let i = 0; i < xAxis.length; i++) {
-                    total += xAxis[i] * yAxis[i];
+            <Result icon={<></>}>
+                平均: {(() => {
+                if (xAxis && yAxis) {
+                    let total = 0;
+                    for (let i = 0; i < xAxis.length; i++) {
+                        total += xAxis[i] * yAxis[i];
+                    }
+                    return math.bignumber(total).div(simulateTimes).toNumber();
                 }
-                return total / simulateTimes;
-            }
-        })()}
+            })()}
+            </Result>
         </Spin>
     </>
 }
