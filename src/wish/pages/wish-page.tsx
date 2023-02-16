@@ -32,7 +32,7 @@ export function WishPage() {
     return (
         <div>
             <Layout>
-                <Descriptions bordered>
+                <Descriptions bordered size={'small'} column={{xs: 2, sm: 3, md: 4, lg: 6, xl: 6, xxl: 6}}>
                     <Descriptions.Item label={'5星角色'}>
                         <Select value={characterTargets.get(tuple2Enum([5, 'up'])) ?? 0} disabled={loading}
                                 bordered={false}
