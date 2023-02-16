@@ -24,5 +24,5 @@ export function MyEcharts(props: { option: any }) {
     if (chart) {
         chart.setOption(props.option)
     }
-    return <div ref={ref} style={{width: '100%', height: '300px'}}></div>;
+    return <div ref={ref} style={{width: '100%', height: '20rem'}}></div>;
 }
