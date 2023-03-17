@@ -53,7 +53,7 @@ export function WishPage() {
                         </Col>
                         <Col span={16}>
                             <InputNumber value={characterCurrent[0]} disabled={loading}
-                                         min={0} max={89} precision={0} bordered={false}
+                                         min={0} max={89} precision={0} bordered={false} controls={false}
                                          onBlur={() => {
                                              !pause && setRefreshChart(fresh => !fresh);
                                              pause && setPauseChange(true);
@@ -111,7 +111,7 @@ export function WishPage() {
                         </Col>
                         <Col span={16}>
                             <InputNumber value={weaponCurrent[0]} disabled={loading} bordered={false}
-                                         min={0} max={79} precision={0}
+                                         min={0} max={79} precision={0} controls={false}
                                          onBlur={() => {
                                              !pause && setRefreshChart(fresh => !fresh);
                                              pause && setPauseChange(true);
