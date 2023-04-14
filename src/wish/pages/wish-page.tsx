@@ -208,7 +208,7 @@ export function WishPage() {
                                         pause && setPauseChange(true);
                                         setRefreshPage(refresh => !refresh);
                                     }}>
-                                {[20000, 50000, 100000].map(value => <Select.Option
+                                {[10000, 20000, 50000, 100000].map(value => <Select.Option
                                     value={value}>{value}</Select.Option>)}
                             </Select>
                         </Col>
