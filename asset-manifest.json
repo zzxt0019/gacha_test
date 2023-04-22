@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/gacha_test/static/js/main.d8aef52a.js",
+    "main.js": "/gacha_test/static/js/main.51c7e8a0.js",
     "index.html": "/gacha_test/index.html",
-    "main.d8aef52a.js.map": "/gacha_test/static/js/main.d8aef52a.js.map"
+    "main.51c7e8a0.js.map": "/gacha_test/static/js/main.51c7e8a0.js.map"
   },
   "entrypoints": [
-    "static/js/main.d8aef52a.js"
+    "static/js/main.51c7e8a0.js"
   ]
 }
