@@ -1,10 +1,10 @@
 import React from 'react';
 import {YsWishPage} from "./wish/pages/ys-wish-page";
 import {AreaContext} from "./base/area-context";
-import {Route, Routes, useNavigate} from "react-router";
+import {Route, Routes} from "react-router";
 import {BrowserRouter, Link} from "react-router-dom";
 import {BtWishPage} from "./wish/pages/bt-wish-page";
-import {Breadcrumb, Menu} from "antd";
+import {Menu} from "antd";
 
 function App() {
     return (<>
