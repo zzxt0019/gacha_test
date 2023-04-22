@@ -1,16 +1,16 @@
 import {Col, InputNumber, Row, Select, Spin, Tooltip} from "antd";
 import {MustGetChart} from "../charts/must-get-chart";
 import React from "react";
-import {Weapon} from "../service/weapon";
+import {BtWeapon} from "../service/bt-weapon";
 import {tuple2Enum} from "../../base/data";
 import {Character} from "../service/character";
 import {CaretRightOutlined, CloseOutlined, LoadingOutlined, PauseOutlined, ReloadOutlined} from "@ant-design/icons";
 
-export function WishPage() {
+export function BtWishPage() {
     const [characterCurrent, setCharacterCurrent] = React.useState([0, 0]);
     const [weaponCurrent, setWeaponCurrent] = React.useState([0, 0]);
     const [characterState, setCharacterState] = React.useState([[0], [0]]);
-    const [weaponState, setWeaponState] = React.useState([[0, 0], [0]]);
+    const [weaponState, setWeaponState] = React.useState([[0], [0]]);
     const [simulateTimes, setSimulateTimes] = React.useState(20000);
     const [characterTargets,] = React.useState((() => {
         const map = new Map<[number, string], number>();
@@ -131,26 +131,13 @@ export function WishPage() {
                         <Col span={8}>
                             <Select value={weaponState[0][0]} disabled={loading} bordered={false}
                                     onChange={(value: number) => {
-                                        setWeaponState([[value, weaponState[0][1]], weaponState[1]]);
+                                        setWeaponState([[value], weaponState[1]]);
                                         !pause && setRefreshChart(fresh => !fresh);
                                         pause && setPauseChange(true);
                                         setRefreshPage(refresh => !refresh);
                                     }}>
                                 <Select.Option value={0}>小保底</Select.Option>
                                 <Select.Option value={1}>大保底</Select.Option>
-                            </Select>
-                        </Col>
-                        <Col span={8}>
-                            <Select value={weaponState[0][1]} disabled={loading} bordered={false}
-                                    onChange={(value: number) => {
-                                        weaponState[0][1] = value;
-                                        setWeaponState([[weaponState[0][0], value], weaponState[1]]);
-                                        !pause && setRefreshChart(fresh => !fresh);
-                                        pause && setPauseChange(true);
-                                        setRefreshPage(refresh => !refresh);
-                                    }}>
-                                {[0, 1, 2].map(value => <Select.Option
-                                    value={value}>定轨{value}</Select.Option>)}
                             </Select>
                         </Col>
                     </Row>
@@ -287,7 +274,7 @@ export function WishPage() {
                         state: characterState,
                     },
                     {
-                        baseWish: () => new Weapon(),
+                        baseWish: () => new BtWeapon(),
                         targets: weaponTargets,
                         current: weaponCurrent,
                         state: weaponState,

@@ -1,6 +1,6 @@
 import {BaseWish} from "./base-wish";
 
-export class Weapon implements BaseWish {
+export class YsWeapon implements BaseWish {
     current: number[] = [0, 0];
     total: number = 0;
     /*
@@ -28,7 +28,7 @@ export class Weapon implements BaseWish {
         }
     }
 
-    wish(): WeaponResult {
+    wish(): YsWeaponResult {
         this.current[0]++;
         this.current[1]++;
         this.total++;
@@ -79,7 +79,7 @@ export class Weapon implements BaseWish {
     }
 }
 
-export type WeaponResult =
+export type YsWeaponResult =
     [5, 'up'] |
     [5, 'other-up'] |
     [5, 'other-w'] |
