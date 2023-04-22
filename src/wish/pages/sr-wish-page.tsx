@@ -1,12 +1,12 @@
 import {Col, InputNumber, Row, Select, Spin, Tooltip} from "antd";
 import {MustGetChart} from "../charts/must-get-chart";
 import React from "react";
-import {BtWeapon} from "../service/bt-weapon";
+import {SrWeapon} from "../service/sr-weapon";
 import {tuple2Enum} from "../../base/data";
 import {Character} from "../service/character";
 import {CaretRightOutlined, CloseOutlined, LoadingOutlined, PauseOutlined, ReloadOutlined} from "@ant-design/icons";
 
-export function BtWishPage() {
+export function SrWishPage() {
     const [characterCurrent, setCharacterCurrent] = React.useState([0, 0]);
     const [weaponCurrent, setWeaponCurrent] = React.useState([0, 0]);
     const [characterState, setCharacterState] = React.useState([[0], [0]]);
@@ -274,7 +274,7 @@ export function BtWishPage() {
                         state: characterState,
                     },
                     {
-                        baseWish: () => new BtWeapon(),
+                        baseWish: () => new SrWeapon(),
                         targets: weaponTargets,
                         current: weaponCurrent,
                         state: weaponState,

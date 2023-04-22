@@ -1,6 +1,6 @@
 import {BaseWish} from "./base-wish";
 
-export class BtWeapon implements BaseWish {
+export class SrWeapon implements BaseWish {
     current: number[] = [0, 0];
     /*
       [五星保底, 四星保底]
@@ -24,7 +24,7 @@ export class BtWeapon implements BaseWish {
         }
     }
 
-    wish(): BtWeaponResult {
+    wish(): SrWeaponResult {
         this.current[0]++;
         this.current[1]++;
         this.total++;
@@ -53,7 +53,7 @@ export class BtWeapon implements BaseWish {
 
 }
 
-export type BtWeaponResult =
+export type SrWeaponResult =
     [5, 'up'] |  // 5星up
     [5, 'other-c'] |  // 5星其他
     [4, 'up1'] |  // 4星up1
