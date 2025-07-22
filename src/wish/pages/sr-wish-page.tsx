@@ -40,7 +40,7 @@ export function SrWishPage() {
                                         pause && setPauseChange(true);
                                         setRefreshPage(refresh => !refresh);
                                     }}>
-                                {[0, 1, 2, 3, 4, 5, 6, 7].map(c => <Select.Option key={c} value={c}>
+                                {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map(c => <Select.Option key={c} value={c}>
                                     {c === 0 ? '无' : `${c - 1}命`}</Select.Option>)}
                             </Select>
                         </Col>
